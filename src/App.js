@@ -38,7 +38,7 @@ function AnimationCallbacks(
 
     animatedElement.current.addEventListener('transitionstart', onTransitionStarted);
     animatedElement.current.addEventListener('transitionend', onTransitionEnded);
-  }, [animatedElement, onAnimationEnded, onAnimationStarted, onTransitionEnded, onTransitionStarted]);
+  }, []);
 
   return renderAnimatedElement();
 }
