@@ -33,11 +33,21 @@ function AnimationCallbacks(
   }) {
 
   React.useEffect(() => {
-    animatedElement.current.addEventListener('animationstart', onAnimationStarted);
-    animatedElement.current.addEventListener('animationend', onAnimationEnded);
+    const current = animatedElement.current;
+    
+    current.addEventListener('animationstart', onAnimationStarted);
+    current.addEventListener('animationend', onAnimationEnded);
 
-    animatedElement.current.addEventListener('transitionstart', onTransitionStarted);
-    animatedElement.current.addEventListener('transitionend', onTransitionEnded);
+    current.addEventListener('transitionstart', onTransitionStarted);
+    current.addEventListener('transitionend', onTransitionEnded);
+    
+    return () => {
+      current.removeEventListener('animationstart', onAnimationStarted);
+      current.removeEventListener('animationend', onAnimationEnded);
+
+      current.removeEventListener('transitionstart', onTransitionStarted);
+      current.removeEventListener('transitionend', onTransitionEnded);
+    }
   }, []);
 
   return renderAnimatedElement();
