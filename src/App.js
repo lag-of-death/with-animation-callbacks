@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, {css, keyframes} from 'styled-components';
-import {CSSTransition, SwitchTransition, TransitionGroup} from "react-transition-group";
+import {CSSTransition, SwitchTransition, Transition, TransitionGroup} from "react-transition-group";
 
 const timeout = 1000;
 
@@ -88,10 +88,38 @@ function AnimationCallbacks(
       current.removeEventListener('transitionstart', onTransitionStarted);
       current.removeEventListener('transitionend', onTransitionEnded);
     }
-  }, []);
+  }, [animatedElement, onAnimationEnded, onAnimationStarted, onTransitionEnded, onTransitionStarted]);
 
   return renderAnimatedElement();
 }
+
+const transitionStyles = {
+  entering: { opacity: 1 },
+  entered:  { opacity: 1 },
+  exiting:  { opacity: 0 },
+  exited:  { opacity: 0 },
+};
+
+const duration = 300;
+
+const defaultStyle = {
+  transition: `opacity ${duration}ms ease-in-out`,
+  opacity: 0,
+};
+
+
+const Fade = ({ in: inProp }) => (
+  <Transition in={inProp} timeout={duration}>
+    {state => (
+      <div style={{
+        ...defaultStyle,
+        ...transitionStyles[state]
+      }}>
+        I'm a fade Transition!
+      </div>
+    )}
+  </Transition>
+);
 
 function App() {
   const ref = React.useRef();
@@ -99,12 +127,23 @@ function App() {
   const [showMessage, setShowMessage] = React.useState(false);
   const [items, setItems] = React.useState([1,2,3,4,5]);
   const [switchState, setSwitchState] = React.useState(true);
+  const [inProp, setInProp] = React.useState(false);
 
   const modes = ["out-in", "in-out"];
   const mode = modes[0];
   
   return (
     <div>
+      <h1>Transition</h1>
+
+      <Fade in={inProp} />
+
+      <button onClick={() => setInProp((prev) => !prev)}>
+        toggle Transition
+      </button>
+
+      <hr/>
+
       <h1>CSSTransition</h1>
 
       <CSSTransition
